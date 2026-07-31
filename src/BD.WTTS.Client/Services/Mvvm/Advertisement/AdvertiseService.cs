@@ -112,9 +112,7 @@ public sealed class AdvertiseService : ReactiveObject
             return;
         }
 
-        if (UserService.Current.User != null && UserService.Current.User.UserType == UserType.Sponsor)
-        {
-            if (!UISettings.IsShowAdvertisement.Value)
+        if (!UISettings.IsShowAdvertisement.Value)
             {
                 IsShowAdvertise = false;
                 return;
@@ -127,6 +125,6 @@ public sealed class AdvertiseService : ReactiveObject
         //    return;
         //}
 
-        IsShowAdvertise = true;
+        IsShowAdvertise = false;
     }
 }
