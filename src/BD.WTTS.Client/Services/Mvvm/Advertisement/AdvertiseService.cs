@@ -117,7 +117,6 @@ public sealed class AdvertiseService : ReactiveObject
                 IsShowAdvertise = false;
                 return;
             }
-        }
 
         //if (IsInitialized && !AdvertisementsSource.Items.Any_Nullable())
         //{
