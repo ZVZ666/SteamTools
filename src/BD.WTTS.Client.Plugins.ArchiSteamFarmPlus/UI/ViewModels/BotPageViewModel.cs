@@ -34,7 +34,7 @@ public partial class BotPageViewModel : ViewModelBase
 
     public async Task SelectBotFiles_Click()
     {
-        BD.Common.Models.FilePickerFileType? fileTypes;
+        FilePickerFileType? fileTypes;
         if (IApplication.IsDesktop())
         {
             fileTypes = new ValueTuple<string, string[]>[]

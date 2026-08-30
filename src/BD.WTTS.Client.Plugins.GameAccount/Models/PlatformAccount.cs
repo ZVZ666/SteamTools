@@ -197,6 +197,7 @@ public sealed partial class PlatformAccount
 
         using SKCanvas canvas = new(avatarImgBitmap);
         SKPaint paint = new SKPaint();
+        // paint.FilterQuality = SKSamplingOptions.Default;
         canvas.DrawBitmap(originalBitmap.Resize(new SKSizeI(iconSize, iconSize), SKSamplingOptions.Default),
             new SKRect(0, 0, iconSize, iconSize), paint);
 
