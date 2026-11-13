@@ -144,18 +144,22 @@ public sealed partial class MainWindow : ReactiveAppWindow<MainWindowViewModel>
             return false;
 
         Type? pageType = null;
-        if (!string.IsNullOrEmpty(UISettings.StartDefaultPageName.Value))
+        var tabItems = mw2?.TabItems;
+        if (tabItems != null && !string.IsNullOrEmpty(UISettings.StartDefaultPageName.Value))
         {
-            var tabItems = mw2?.TabItems;
-            if (tabItems == null)
-                return false;
-
             var page = tabItems.OfType<MenuTabItemViewModel>()
                         .FirstOrDefault(s => s.Id == UISettings.StartDefaultPageName.Value);
             if (page != null)
             {
                 pageType = page.PageType;
             }
+        }
+        if (pageType == null && tabItems != null)
+        {
+            // 默认启动页改为「加速」菜单
+            pageType = tabItems.OfType<MenuTabItemViewModel>()
+                .FirstOrDefault(static s => s.PageType != null && s.Id.StartsWith("Accelerator-", StringComparison.Ordinal))?.PageType
+                ?? tabItems.OfType<MenuTabItemViewModel>().FirstOrDefault(static s => s.PageType != null)?.PageType;
         }
         INavigationService.Instance.Navigate(pageType ?? typeof(HomePage));
         return true;
@@ -300,15 +304,7 @@ public sealed class AppSplashScreen : IApplicationSplashScreen
                     mainWindow.ThrowIsNull();
 
 #pragma warning disable SA1114 // Parameter list should follow declaration
-                    IViewModelManager.Instance.InitViewModels(new TabItemViewModel[]
-                    {
-                        new MenuTabItemViewModel("Welcome")
-                        {
-                           PageType = typeof(HomePage),
-                           IsResourceGet = true,
-                           IconKey = "avares://BD.WTTS.Client.Avalonia/UI/Assets/Icons/home.ico",
-                        },
-                    },
+                    IViewModelManager.Instance.InitViewModels(Array.Empty<TabItemViewModel>(),
                     ImmutableArray.Create<TabItemViewModel>(
 #if DEBUG
                     new MenuTabItemViewModel("Debug")
